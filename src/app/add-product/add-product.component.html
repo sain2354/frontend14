@@ -1,0 +1,109 @@
+<div class="header"> 
+  <span class="store-name">FRITZ</span>
+  <nav class="menu">
+    <a href="#" (click)="filterProductsByCategory(1)">CALZADO</a>
+    <a href="#" (click)="filterProductsByCategory(2)">HOMBRE</a>
+    <a href="#" (click)="filterProductsByCategory(3)">MUJER</a>
+    <a href="#" (click)="filterProductsByCategory(4)">NIÑOS</a>
+    <a href="#" (click)="filterProductsByCategory(5)">DEPORTE</a>
+  </nav>
+  <div class="cart-icon">🛒</div>
+</div>
+
+<div class="sidebar">
+  <div class="sidebar-section">
+    <button (click)="toggleProductDropdown()" class="sidebar-button">PRODUCTOS</button>
+    <div *ngIf="isProductDropdownOpen" class="dropdown">
+      <button (click)="openModal()" class="dropdown-button">Agregar Producto</button>
+    </div>
+  </div>
+  <div class="sidebar-section">
+    <button (click)="toggleSalesDropdown()" class="sidebar-button">VENTAS</button>
+    <div *ngIf="isSalesDropdownOpen" class="dropdown">
+      <button (click)="openSaleModal()" class="dropdown-button">Registrar Venta</button>
+    </div>
+  </div>
+</div>
+
+<div class="product-section">
+  <div class="product-grid">
+    <div *ngFor="let product of products" class="product-card">
+      <div class="product-image">
+        <img [src]="product.Imagen" alt="{{ product.Nombre }} Imagen" />
+      </div>
+      <div class="product-info">
+        <h4>{{ product.Nombre }}</h4> <!-- Asegúrate de que esta línea esté presente -->
+        <p>Precio: {{ product.Precio | currency }}</p> <!-- Asegúrate de que esta línea esté presente -->
+        <button (click)="deleteProduct(product.id)">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal para agregar producto -->
+<div *ngIf="isModalOpen" class="modal">
+  <div class="modal-content">
+    <h3>INGRESAR PRODUCTO</h3>
+    <div class="form-group">
+      <label for="name">Nombre:</label>
+      <input type="text" id="name" [(ngModel)]="productName" required />
+    </div>
+    <div class="form-group">
+      <label for="price">Precio:</label>
+      <input type="number" id="price" [(ngModel)]="productPrice" required />
+    </div>
+    <div class="form-group">
+      <label for="category">CategoríaId:</label>
+      <select id="category" [(ngModel)]="productCategory" required>
+        <option value="1">Calzado</option>
+        <option value="2">Hombre</option>
+        <option value="3">Mujer</option>
+        <option value="4">Niños</option>
+        <option value="5">Deporte</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="image">Imagen del Producto:</label>
+      <div class="image-upload">
+        <div class="image-preview" *ngIf="productImagenUrl">
+          <img [src]="productImagenUrl" alt="Vista previa de la imagen" />
+        </div>
+        <input type="file" id="image" (change)="onImageSelected($event)" />
+      </div>
+    </div>
+    <div class="modal-buttons">
+      <button (click)="createProduct()">Crear Producto</button>
+      <button (click)="closeModal()">Cerrar</button>
+    </div>
+    <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
+  </div>
+</div>
+
+
+<!-- Modal para registrar venta -->
+<div *ngIf="isSaleModalOpen" class="modal">
+  <div class="modal-content">
+    <h3>REGISTRAR VENTA</h3>
+    <div class="form-group">
+      <label for="client">Cliente:</label>
+      <input type="text" id="client" [(ngModel)]="clientName" />
+    </div>
+    <div class="form-group">
+      <label for="product">Producto:</label>
+      <select id="product" [(ngModel)]="selectedProduct">
+        <option value="0" disabled>Seleccione un producto</option>
+        <option *ngFor="let product of products" [value]="product.id">
+          {{ product.Nombre }} - Precio: {{ product.Precio | currency }}
+        </option>
+      </select>
+    </div>
+    <div class="modal-buttons">
+      <button (click)="registerSale()">Registrar Venta</button>
+      <button (click)="closeSaleModal()">Cerrar</button>
+    </div>
+    <div *ngIf="saleSuccessMessage" class="success-message">{{ saleSuccessMessage }}</div>
+  </div>
+</div>
+
+

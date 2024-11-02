@@ -1,0 +1,43 @@
+<div class="header"> 
+    <span class="store-name">FRITZ</span>
+    <nav class="menu">
+      <a href="#" (click)="filterProductsByCategory(1)">CALZADO</a>
+      <a href="#" (click)="filterProductsByCategory(2)">HOMBRE</a>
+      <a href="#" (click)="filterProductsByCategory(3)">MUJER</a>
+      <a href="#" (click)="filterProductsByCategory(4)">NIÑOS</a>
+      <a href="#" (click)="filterProductsByCategory(5)">DEPORTE</a>
+    </nav>
+    <div class="cart-icon">🛒</div>
+</div>
+
+<div class="sidebar">
+    <div class="sidebar-section">
+      <button (click)="openSaleModal()" class="sidebar-button">Registrar Venta</button>
+    </div>
+</div>
+
+<!-- Modal para registrar venta -->
+<div *ngIf="isSaleModalOpen" class="modal">
+    <div class="modal-content">
+        <h3>REGISTRAR VENTA</h3>
+        <div class="form-group">
+            <label for="client">Cliente:</label>
+            <input type="text" id="client" [(ngModel)]="clientName" />
+        </div>
+        <div class="form-group">
+            <label for="product">Producto:</label>
+            <select id="product" [(ngModel)]="selectedProduct">
+                <option value="0" disabled>Seleccione un producto</option>
+                <option *ngFor="let product of products" [value]="product.id">
+                  {{ product.Nombre }} - Precio: {{ product.Precio | currency }}
+                </option>
+              </select>
+              
+        </div>
+        <div class="modal-buttons">
+            <button (click)="registerSale()">Registrar Venta</button>
+            <button (click)="closeSaleModal()">Cerrar</button>
+        </div>
+        <div *ngIf="saleSuccessMessage" class="success-message">{{ saleSuccessMessage }}</div>
+    </div>
+</div>
